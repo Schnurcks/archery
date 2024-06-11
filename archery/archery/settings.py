@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-7iyry!0(6gid@=u95mue&s#3f2td#qfzp3%%$%77i85e12^06!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*', 'localhost','127.0.0.1']
+ALLOWED_HOSTS = ['localhost','127.0.0.1']
 
 
 # Application definition
@@ -124,3 +124,18 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+try:
+    # pylint: disable=wildcard-import
+    # pylint: disable=unused-wildcard-import
+    from .local_settings import *
+    print("\nSuccesfully imported local_settings")
+except ImportError:
+    print("No local file imported.")
+
+print("\nSettings Output")
+print(f'ALLOWED HOSTS: {ALLOWED_HOSTS}')
+print(f'DEBUG: {DEBUG}')
+print(f'STATIC_ROOT: {STATIC_ROOT}')
+print(f'BASE_DIR: {BASE_DIR}')
+print("\n")
