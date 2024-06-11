@@ -1,5 +1,4 @@
 venv/*
 db.sqlite3
-archery/archery/local_settings.py
 *.pyc
-archery/archery/__pycache__/*
+archery/archery/local_settings.py
