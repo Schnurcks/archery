@@ -1,13 +1,35 @@
 from django.db import models
 
+class ArrowShaftModel(models.Model):
+    # Arrow Shaft
+    manufacturer = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
+    inner_diameter = models.FloatField()
+    color = models.CharField(max_length=30, default='black')
+    
+    def __str__(self):
+        return f'{self.manufacturer} - {self.name} {self.inner_diameter}'
+
+class ArrowShaftSpecific(models.Model):
+    arrow_shaft = models.ForeignKey(ArrowShaftModel, on_delete=models.CASCADE)
+    spine = models.IntegerField()
+    outer_diameter = models.FloatField()
+    weight_per_inch = models.FloatField()
+    max_mength = models.FloatField()
+
+    def __str__(self):
+        return f'{self.arrow_shaft} (Spine: {self.spine}, {self.weight_per_inch} gn/in)'
+
 class Arrow(models.Model):
     # Represents a complete arrow modell
     title = models.CharField(max_length=50)
-    foc = models.FloatField()
-    total_weight = models.FloatField()
+    foc = models.FloatField(null=True)
+    total_weight = models.FloatField(null=True)
+    shaft = models.ForeignKey(ArrowShaftSpecific, on_delete=models.PROTECT, null=True)
+    shaft_length = models.FloatField(null=True)
 
     def __str__(self):
-        return {self.title}
+        return self.title
 
 class ArrowComponentType(models.Model):
     # Contains possible types of arrow components 
@@ -35,9 +57,11 @@ class ArrowComponentPropertyType(models.Model):
 class ArrowComponent(models.Model):
     # Specific arrow components 
     type = models.ForeignKey(ArrowComponentType, on_delete=models.PROTECT)
+    manufacturer = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
     
     def __str__(self):
-        return {self.type}
+        return f'{self.manufacturer} - {self.name} ({self.type.label})'
 
 class ArrowComponentProperty(models.Model):
     # Property of an arrow component
@@ -48,7 +72,7 @@ class ArrowComponentProperty(models.Model):
 
     
     def __str__(self):
-        return {self.arrow_component}
+        return self.arrow_component
 
 class ArrowComponentRelation(models.Model):
     # Lists Describes the properties of an arrow
@@ -68,4 +92,4 @@ class KnowHowArticle(models.Model):
 
     
     def __str__(self):
-        return {self.title}
+        return self.title
